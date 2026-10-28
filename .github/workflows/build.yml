@@ -9,20 +9,19 @@ jobs:
         with:
           flutter-version: '3.22.0'
           channel: 'stable'
-      - name: Fix Gradle
+      - name: Fix Gradle Corretamente
         run: |
           flutter create -t app fix_temp
-          cp -r lib fix_temp/lib
+          cp lib/main.dart fix_temp/lib/main.dart
           cp pubspec.yaml fix_temp/pubspec.yaml
           rm -rf android lib
-          cp -r fix_temp/android ./
-          cp -r fix_temp/lib ./
+          mv fix_temp/android ./
+          mv fix_temp/lib ./
           rm -rf fix_temp
-          # Renomeia app ao instalar
           sed -i 's/android:label="hora_extra"/android:label="Calculadora de Hora Extra"/g' android/app/src/main/AndroidManifest.xml
       - run: flutter pub get
       - run: flutter build apk --release
       - uses: actions/upload-artifact@v4
         with:
-          name: Calculadora-Hora-Extra-FINAL
+          name: Calculadora-Hora-Extra-CORRIGIDA
           path: build/app/outputs/flutter-apk/app-release.apk
