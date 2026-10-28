@@ -9,20 +9,39 @@ jobs:
         with:
           flutter-version: '3.22.0'
           channel: 'stable'
-      - name: Fix Project and Rename App
+      - name: Gerar Logo Automatica
+        run: |
+          mkdir -p assets
+          python3 -c "
+          from PIL import Image, ImageDraw, ImageFont
+          W=1024
+          img=Image.new('RGBA',(W,W),(15,23,42,255))
+          draw=ImageDraw.Draw(img)
+          draw.arc([120,120,904,904],0,360,fill=(34,211,238),width=35)
+          cx,cy=W//2,W//2-20
+          draw.line([cx,cy,cx-140,cy-100],fill=(34,211,238),width=35)
+          draw.line([cx,cy,cx+140,cy-80],fill=(6,182,212),width=35)
+          try:
+              fnt=ImageFont.truetype('DejaVuSans-Bold.ttf',200)
+              fnt2=ImageFont.truetype('DejaVuSans-Bold.ttf',70)
+          except:
+              fnt=ImageFont.load_default()
+              fnt2=fnt
+          draw.text((240,470),'R\$',fill=(34,211,238),font=fnt)
+          draw.text((760,180),'+%',fill=(34,211,238),font=fnt2)
+          img.save('assets/logo.png')
+          "
+      - name: Fix e Renomear App
         run: |
           flutter create -t app temp_fix
-          cp -r lib temp_fix/
+          cp -r lib temp_fix/ 2>/dev/null || true
           cp pubspec.yaml temp_fix/
-          rm -rf lib android ios pubspec.yaml
-          cp -r temp_fix/lib .
-          cp -r temp_fix/android .
-          cp temp_fix/pubspec.yaml .
-          rm -rf temp_fix
-          sed -i 's/android:label="hora_extra"/android:label="Calculadora de Hora Extra"/' android/app/src/main/AndroidManifest.xml
-          sed -i 's/android:label="hora_extra"/android:label="Calculadora de Hora Extra"/' android/app/src/main/AndroidManifest.xml || true
-          grep -q "Calculadora de Hora Extra" android/app/src/main/AndroidManifest.xml || sed -i 's/<application/<application android:label="Calculadora de Hora Extra"/' android/app/src/main/AndroidManifest.xml
+          cp -r assets temp_fix/
+          rm -rf lib android ios
+          cp -r temp_fix/lib .; cp -r temp_fix/android .; cp -r temp_fix/assets .; cp temp_fix/pubspec.yaml .; rm -rf temp_fix
+          sed -i 's/android:label="hora_extra"/android:label="Calculadora de Hora Extra"/g' android/app/src/main/AndroidManifest.xml
       - run: flutter pub get
+      - run: dart run flutter_launcher_icons
       - run: flutter build apk --release
       - uses: actions/upload-artifact@v4
         with:
