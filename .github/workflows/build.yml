@@ -13,5 +13,5 @@ jobs:
       - run: flutter build apk --release
       - uses: actions/upload-artifact@v4
         with:
-          name: Calculadora-Hora-Extra-V4
+          name: Calculadora-Hora-Extra
           path: build/app/outputs/flutter-apk/app-release.apk
