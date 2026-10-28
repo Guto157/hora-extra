@@ -9,7 +9,7 @@ jobs:
         with:
           flutter-version: '3.22.0'
           channel: 'stable'
-      - name: Fix Gradle Corretamente
+      - name: Fix Gradle e Nome
         run: |
           flutter create -t app fix_temp
           cp lib/main.dart fix_temp/lib/main.dart
@@ -18,10 +18,10 @@ jobs:
           mv fix_temp/android ./
           mv fix_temp/lib ./
           rm -rf fix_temp
-          sed -i 's/android:label="hora_extra"/android:label="Calculadora de Hora Extra"/g' android/app/src/main/AndroidManifest.xml
+          sed -i 's/android:label=".*"/android:label="Calculadora Hora Extra"/g' android/app/src/main/AndroidManifest.xml
       - run: flutter pub get
       - run: flutter build apk --release
       - uses: actions/upload-artifact@v4
         with:
-          name: Calculadora-Hora-Extra-CORRIGIDA
+          name: Calculadora-Hora-Extra-CALENDARIO
           path: build/app/outputs/flutter-apk/app-release.apk
