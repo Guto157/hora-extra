@@ -1,11 +1,13 @@
 name: hora_extra
-description: Calculadora de Hora Extra
+description: Calculadora Hora Extra
 publish_to: 'none'
-version: 1.0.0+7
+version: 1.0.0+12
 environment:
   sdk: '>=3.0.0 <4.0.0'
 dependencies:
   flutter:
+    sdk: flutter
+  flutter_localizations:
     sdk: flutter
 flutter:
   uses-material-design: true
