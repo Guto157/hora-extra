@@ -9,7 +9,7 @@ jobs:
         with:
           flutter-version: '3.22.0'
           channel: 'stable'
-      - name: Fix Project
+      - name: Fix Project and Rename App
         run: |
           flutter create -t app temp_fix
           cp -r lib temp_fix/
@@ -19,9 +19,12 @@ jobs:
           cp -r temp_fix/android .
           cp temp_fix/pubspec.yaml .
           rm -rf temp_fix
+          sed -i 's/android:label="hora_extra"/android:label="Calculadora de Hora Extra"/' android/app/src/main/AndroidManifest.xml
+          sed -i 's/android:label="hora_extra"/android:label="Calculadora de Hora Extra"/' android/app/src/main/AndroidManifest.xml || true
+          grep -q "Calculadora de Hora Extra" android/app/src/main/AndroidManifest.xml || sed -i 's/<application/<application android:label="Calculadora de Hora Extra"/' android/app/src/main/AndroidManifest.xml
       - run: flutter pub get
       - run: flutter build apk --release
       - uses: actions/upload-artifact@v4
         with:
-          name: hora-extra-apk
+          name: Calculadora-de-Hora-Extra
           path: build/app/outputs/flutter-apk/app-release.apk
